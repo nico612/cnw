@@ -1,0 +1,3 @@
+- json_serializable：自动生成`json`和对象的解析文件, example见[官方文档](https://pub.dev/packages/json_serializable)，需要安装`build_runner`插件， `flutter pub add dev:build_runner`
+- shared_preferences：数据持久化
+- encript：加解密
