@@ -1,0 +1,42 @@
+{
+  "code": 1,
+  "data": [
+    {
+      "bg_color": null,
+      "client_url": null,
+      "id": 197,
+      "img_url": "https://img.cniao5.com/1667810133737.png",
+      "is_blank": true,
+      "order_num": 1,
+      "redirect_url": "https://www.cniao5.com/course/10329?from=index_bannner"
+    },
+    {
+      "bg_color": null,
+      "client_url": null,
+      "id": 192,
+      "img_url": "https://img.cniao5.com/1649754376710.png",
+      "is_blank": true,
+      "order_num": 3,
+      "redirect_url": "https://www.cniao5.com/course/10322?from=index_banner"
+    },
+    {
+      "bg_color": null,
+      "client_url": null,
+      "id": 182,
+      "img_url": "https://img.cniao5.com/1620379031324",
+      "is_blank": true,
+      "order_num": 4,
+      "redirect_url": "https://www.cniao5.com/course/10301?from=index_banner"
+    },
+    {
+      "bg_color": null,
+      "client_url": null,
+      "id": 183,
+      "img_url": "https://img.cniao5.com/1620379422237",
+      "is_blank": true,
+      "order_num": 6,
+      "redirect_url": "https://www.cniao5.com/course/10303?from=index_banner"
+    }
+  ],
+  "message": "成功"
+}

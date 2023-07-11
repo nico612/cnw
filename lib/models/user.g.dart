@@ -8,26 +8,44 @@ part of 'user.dart';
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
       id: json['id'] as int,
-      isBindPhone: json['is_bind_phone'] as bool,
-      logoUrl: json['logoUrl'] as String?,
       username: json['username'] as String?,
-      isTeacher: json['is_teacher'] as bool?,
+      avatar: json['avatar'] as String?,
+      teacher: json['teacher'] as bool?,
+      admin: json['admin'] as bool?,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,
-      'is_bind_phone': instance.isBindPhone,
-      'logoUrl': instance.logoUrl,
+      'avatar': instance.avatar,
       'username': instance.username,
-      'is_teacher': instance.isTeacher,
+      'teacher': instance.teacher,
+      'admin': instance.admin,
+    };
+
+TokenInfo _$TokenInfoFromJson(Map<String, dynamic> json) => TokenInfo(
+      json['tokenName'] as String,
+      json['tokenValue'] as String,
+      json['loginType'] as String,
+      json['tokenTimeout'] as int,
+      json['tokenActivityTimeout'] as int,
+      json['loginDevice'] as String,
+    );
+
+Map<String, dynamic> _$TokenInfoToJson(TokenInfo instance) => <String, dynamic>{
+      'tokenName': instance.tokenName,
+      'tokenValue': instance.tokenValue,
+      'loginType': instance.loginType,
+      'tokenTimeout': instance.tokenTimeout,
+      'tokenActivityTimeout': instance.tokenActivityTimeout,
+      'loginDevice': instance.loginDevice,
     };
 
 LoginInfo _$LoginInfoFromJson(Map<String, dynamic> json) => LoginInfo(
       User.fromJson(json['user'] as Map<String, dynamic>),
-      json['token'] as String,
+      TokenInfo.fromJson(json['tokenInfo'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$LoginInfoToJson(LoginInfo instance) => <String, dynamic>{
       'user': instance.user,
-      'token': instance.token,
+      'tokenInfo': instance.tokenInfo,
     };

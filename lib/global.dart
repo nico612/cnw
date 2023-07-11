@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:cniao/common/application.dart';
 import 'package:cniao/common/authentication/authentication_repository/authentication_repository.dart';
 import 'package:cniao/common/constant.dart';
+import 'package:cniao/network/http/net_manager.dart';
 import 'package:cniao/router/routers.dart';
 import 'package:cniao/utils/storage.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
 
 /// 全局配置
@@ -67,6 +69,8 @@ class Gloabl {
     /// 包信息
     packageInfo = await PackageInfo.fromPlatform();
 
+
+    // device info
     DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     if (isIOS) {
       iosDeviceInfo = await deviceInfoPlugin.iosInfo;
@@ -76,8 +80,57 @@ class Gloabl {
 
     /// 初始化 路由
     Routers.configRouters(Application.router);
-    
 
+    // init http request
+    HttpNetManager.init(isIOS);
+
+    // Android 沉浸式状态栏
+    if (Platform.isAndroid) {
+      SystemUiOverlayStyle style = const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          ///这是设置状态栏的图标和字体的颜色
+          ///Brightness.light  一般都是显示为白色
+          ///Brightness.dark 一般都是显示为黑色
+          statusBarIconBrightness: Brightness.light);
+      SystemChrome.setSystemUIOverlayStyle(style);
+    }
   }
 
+  //   // 持久化 用户信息
+  // static Future<bool> saveProfile(UserLoginResponseEntity userResponse) {
+  //   profile = userResponse;
+  //   return StorageUtil()
+  //       .setJSON(STORAGE_USER_PROFILE_KEY, userResponse.toJson());
+  // }
+
+  static void initBuglyAndroid() {
+    // 初始化 Bugly
+    // Bugly.initAndroidCrashReport(appId: "xxxxx", isDebug: false);
+    // Bugly.setAndroidAppPackage(appPackage: packageInfo?.packageName);
+    // Bugly.setAppVersion(appVersion: packageInfo?.version);
+    // // Bugly.setAndroidAppChannel(appChannel: "test");
+
+    // //bugly自定义日志,可在"跟踪日志"页面查看
+    // BuglyLog.d(tag: "bugly", content: "debugvalue");
+    // BuglyLog.i(tag: "bugly", content: "infovalue");
+    // BuglyLog.v(tag: "bugly", content: "verbosevalue");
+    // BuglyLog.w(tag: "bugly", content: "warnvalue");
+    // BuglyLog.e(tag: "bugly", content: "errorvalue");
+  }
+
+  static void initBuglyiOS() {
+    // 初始化 Bugly
+    // Bugly.initAndroidCrashReport(appId: "xxxxx", isDebug: false);
+
+    // Bugly.setAppVersion(appVersion: packageInfo?.version);
+    // Bugly.setUserId(userId: "iosuser");
+    // BuglyLog.d(tag: "bugly", content: "debugvalue");
+    // BuglyLog.i(tag: "bugly", content: "infovalue");
+    // BuglyLog.w(tag: "bugly", content: "warnvalue");
+    // BuglyLog.v(tag: "bugly", content: "verbosevalue");
+    // BuglyLog.e(tag: "bugly", content: "errorvalue");
+  }
+
+
 }
+

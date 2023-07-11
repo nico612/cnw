@@ -1,0 +1,22 @@
+{
+  "code": 1,
+  "message": "成功",
+  "data": {
+    "user": {
+      "id": 2341234,
+      "username": "usernaem",
+      "avatar": "https://t13.baidu.com/it/u=2992193737,720814232&fm=224&app=112&f=JPEG?w=500&h=500",
+      "teacher": false,
+      "admin": false
+    },
+    "tokenInfo": {
+      "tokenName": "token",
+      "tokenValue": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJ1c2VyIiwibG9naW5JZCI6MzAwMTc5LCJyblN0ciI6IjFBMWFSamNLZHdibkY1ZlJhTVljRzdyN3FXNkRnWUh1IiwiYXZhdGFyIjoiaHR0cHM6Ly90aGlyZHd4LnFsb2dvLmNuL21tb3Blbi92aV8zMi81cFVac2tuTTBzb1ZVMUhldVZIQzdJT2hldzZOVTlkN2VkTGRrYWNMQmU4YzVkZ2NuUHUzWm9Od2J6MkJ4dDlVcWQ5QzVQd0RQaGU4NGFzb2dLZWxXdy8xMzIiLCJpc1RlYWNoZXIiOmZhbHNlLCJpc0FkbWluIjpmYWxzZSwidXNlcm5hbWUiOiLlsI_lnJ_ljKoifQ.ICrNlbAoA5vDoyPs479VO5ZO2qsVyB4SRliMLYmgHAs",
+      "loginType": "user",
+      "tokenTimeout": 2592000,
+      "tokenActivityTimeout": -1,
+      "loginDevice": "h5"
+    }
+  },
+  "success": true
+}

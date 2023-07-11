@@ -1,3 +1,15 @@
+
+abstract class EnvName {
+  /// 环境key
+  static const String envKey = "DART_DEFINE_APP_ENV";
+
+  /// 环境value
+  static const String dev = "dev";
+  static const String release = "release";
+  static const String test = "test";
+}
+
+
 class ApiConfig {
   final int connectTimeout = 50000;
   final int receiveTimeout = 50000;
@@ -49,25 +61,31 @@ class EnvConfig {
       required this.debug});
 }
 
-/// 获取配置信息
+/// 环境配置类
 class Env {
   /// 获取到当前环境
   static const appEnv = String.fromEnvironment(EnvName.envKey);
 
   static ApiConfig androidApiConfigDev = ApiConfig(
-      "437339077020",
+      "Xzcv0jsbr0",
       "EaGEaGm4nt6yv1VJaBLdabTNJieNuFZ6",
-      "https://testapi.cniao5.com",
-      "android");
+      "https://api.cniao5.com",
+      "H5"
+      );
 
-  static ApiConfig iOSApiConfigDev = ApiConfig("036724862784",
-      "7wcjezwnykp7yKRfZA1Nkrc3nhUmbQfD", "https://testapi.cniao5.com", "iOS");
+  // API配置
+  static ApiConfig iOSApiConfigDev = ApiConfig(
+    "Xzcv0jsbr0", 
+    "7wcjezwnykp7yKRfZA1Nkrc3nhUmbQfD",
+    "https://api.cniao5.com",
+     "H5"
+     );
 
   static ApiConfig androidApiConfigRelease =
-      ApiConfig("xxxxx", "xxxxxxxx", "https://api.cniao5.com", "android");
+      ApiConfig("Xzcv0jsbr0", "EaGEaGm4nt6yv1VJaBLdabTNJieNuFZ6", "https://api.cniao5.com", "H5");
 
   static ApiConfig iOSApiConfigRelease =
-      ApiConfig("xxxxxxx", "xxxxxxx", "https://api.cniao5.com", "iOS");
+      ApiConfig("Xzcv0jsbr0", "7wcjezwnykp7yKRfZA1Nkrc3nhUmbQfD", "https://api.cniao5.com", "H5");
 
   /// 开发环境
   static final EnvConfig _devConfig = EnvConfig(
@@ -104,12 +122,4 @@ class Env {
   }
 }
 
-abstract class EnvName {
-  /// 环境key
-  static const String envKey = "DART_DEFINE_APP_ENV";
 
-  /// 环境value
-  static const String dev = "dev";
-  static const String release = "release";
-  static const String test = "test";
-}
