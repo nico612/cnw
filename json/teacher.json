@@ -1,12 +1,9 @@
 {
-    "brief": "7年+算法从业经验，现任职于阿里，\n曾领导搭建某上市游戏平台算法团队，\n在智能数据、机器学习、深度学习算法落地等方向有丰富的实践经验，\n全面覆盖涵盖自然语言处理（NLP）、计算机视觉（CV）、知识图谱（知识推理）、序列建模等。",
-    "company": "阿里",
-    "courses": 1,
-    "id": 45,
-    "is_follow": 0,
-    "job_title": "高级算法工程师",
-    "logo_url": "//img.cniao5.com/o_1dd4scti59po1p4i26619n52j7.png",
-    "students": 80,
-    "teacher_name": "chris",
-    "teacher_course":"$[]teacher_course"
-  }
+  "brief": "前新浪网架构师，11年工作经验，现任某大型企业技术经理，负责云计算领域，拥有多项国家发明专利。对Tomccat、Jeety、HBase颇有研究，精通TCP/IP和网络编程、数据结构和算法。分享过的文章帮助了十多万初学者入门，热衷于用通俗易懂的方式传播基础知识",
+  "company": "新浪",
+  "courses": "$[]course",
+  "id": 55,
+  "job_title": "架构师",
+  "logo_url": "https://img.cniao5.com/1604728469642",
+  "teacher_name": "老王"
+}

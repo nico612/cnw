@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cniao/common/authentication/bloc/authentication_bloc.dart';
-import 'package:cniao/config.dart';
 import 'package:cniao/models/user.dart';
 import 'package:cniao/network/api/login/net_login.dart';
 import 'package:cniao/pages/login/models/mobile_input_validation.dart';

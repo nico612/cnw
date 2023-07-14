@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cniao/common/application.dart';
 import 'package:cniao/models/adbanner.dart';
-import 'package:cniao/router/routers.dart';
+import 'package:cniao/route/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -35,7 +35,7 @@ class ImageBanner extends StatelessWidget {
           pagination: const SwiperPagination(),
           controller: SwiperController(),
           // containerHeight: (screenWidth / 1920 * 400) + 30,
-          onTap: (index) => Application.navigateTo(context, Routers.webViewPage, params: {"url": banners[index].redirectUrl}),
+          onTap: (index) => Application.navigateTo(context, Routes.webViewPage, params: {"url": banners[index].redirectUrl}),
           autoplay: true,
         ),
       );

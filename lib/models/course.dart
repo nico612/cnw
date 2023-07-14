@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import "course_first_category.dart";
 part 'course.g.dart';
+
 @JsonSerializable()
 class Course extends Equatable {
     const Course({

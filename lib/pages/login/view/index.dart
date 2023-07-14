@@ -40,7 +40,7 @@ class LoginPage extends StatelessWidget {
       body: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
           if (state.status == AuthenticationStatus.authenticated) {
-            // Navigator.pop(context);
+            Navigator.pop(context);
           }
         },
         child: SingleChildScrollView(

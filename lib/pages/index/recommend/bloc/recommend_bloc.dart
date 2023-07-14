@@ -36,16 +36,15 @@ class RecommendBloc extends Bloc<RecommendEvent, RecommendState> {
   // 加载banner数据
   FutureOr<void> _getBanners(RecommendEvent event, Emitter<RecommendState> emitter) async {
     try {
-        List list = await IndexNetManager.bannerList(type: 3, pageShow: 1);
-        List<AdBanner> banners = List<Map<String, dynamic>>.from(list).map((e) => AdBanner.fromJson(e)).toList();
-        emitter(state.copyWith(banners: banners)); //只有当state发生变化时，观察者才会重新build
+      List<AdBanner> banners = await IndexNetManager.bannerList(type: 3, pageShow: 1);
+      emitter(state.copyWith(banners: banners)); //只有当state发生变化时，观察者才会重新build
     } catch (e) {
       print(e);
     }
   }
 
-  FutureOr<void> _getModules(RecommendEvent event, Emitter<RecommendState> emitter) {
-    final List<PageModule> modules = [];
+  FutureOr<void> _getModules(RecommendEvent event, Emitter<RecommendState> emitter) async {
+    final List<PageModule> modules = await IndexNetManager.moduleList();
     emitter(state.copyWith(modules: modules));
   }
   

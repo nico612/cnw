@@ -1,13 +1,17 @@
 
 
-import 'package:card_swiper/card_swiper.dart';
+import 'package:cniao/models/course.dart';
+import 'package:cniao/models/grade.dart';
 import 'package:cniao/models/page_module.dart';
+import 'package:cniao/models/teacher.dart';
 import 'package:cniao/pages/index/recommend/bloc/recommend_bloc.dart';
+import 'package:cniao/pages/index/widget/course/course_list.dart';
 import 'package:cniao/pages/index/widget/image_banner.dart';
+import 'package:cniao/pages/index/widget/image_grid.dart';
+import 'package:cniao/pages/index/widget/teacher_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 bool isSyncGradeModule = false;
@@ -44,6 +48,7 @@ class _RecommendPageState extends State<RecommendPage> with AutomaticKeepAliveCl
   Widget _mainContrainer(BuildContext context, RecommendState state) {
     List<Widget> slivers = [];
     slivers.add(_bannerSliver(state));
+    slivers.addAll(_modulesSliver(state));
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -68,30 +73,51 @@ class _RecommendPageState extends State<RecommendPage> with AutomaticKeepAliveCl
   List<Widget> _modulesSliver(RecommendState state) {
     List<Widget> sliver = [];
     state.modules?.forEach((module) {
-      sliver.addAll(_sliverForModule(module));
+      sliver.add(SliverToBoxAdapter(
+        child: Text(module.title ?? ""),
+      ));
+      sliver.add(_sliverForModule(module));
     });
     return sliver;
   }
 
-  List<Widget> _sliverForModule(PageModule module) {
+  Widget _sliverForModule(PageModule module) {
+    late Widget sliver;
     switch (RecommendType.values[module.type!]) {
       case RecommendType.teacher:
-
+          sliver = _teacherWidget(module);
         break;
       case RecommendType.course:
+        sliver = _courseWidget(module);
         break;
       case RecommendType.grade:
+        sliver = _gradeWidget(module);
         break;
       default:
         break;
     }
-      return [];
+      return sliver;
+  }
+  
+  
+  Widget _gradeWidget(PageModule module) {
+    return ImageGrid(grades: module.datas as List<Grade>);
   }
 
+  Widget _courseWidget(PageModule module) {
+    return CourseList(courses: module.datas as List<Course>);
+  }
 
+  Widget _teacherWidget(PageModule module) {
+    return SliverToBoxAdapter(
+      child: TeacherSwiper(teachers: module.datas as List<Teacher>,)
+    );
+  }
 
   @override
   bool get wantKeepAlive => true;
+  
+  
 
 }
 

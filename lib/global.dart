@@ -5,7 +5,7 @@ import 'package:cniao/common/application.dart';
 import 'package:cniao/common/authentication/authentication_repository/authentication_repository.dart';
 import 'package:cniao/common/constant.dart';
 import 'package:cniao/network/http/net_manager.dart';
-import 'package:cniao/router/routers.dart';
+import 'package:cniao/route/routes.dart';
 import 'package:cniao/utils/storage.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +79,7 @@ class Gloabl {
     }
 
     /// 初始化 路由
-    Routers.configRouters(Application.router);
+    Routes.configRouters(Application.router);
 
     // init http request
     HttpNetManager.init(isIOS);
@@ -98,7 +98,7 @@ class Gloabl {
 
   //   // 持久化 用户信息
   // static Future<bool> saveProfile(UserLoginResponseEntity userResponse) {
-  //   profile = userResponse;
+  //   profile.dart = userResponse;
   //   return StorageUtil()
   //       .setJSON(STORAGE_USER_PROFILE_KEY, userResponse.toJson());
   // }

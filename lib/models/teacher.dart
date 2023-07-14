@@ -1,33 +1,27 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import "teacher_course.dart";
+import "course.dart";
 part 'teacher.g.dart';
 
 @JsonSerializable()
 class Teacher extends Equatable {
     const Teacher({
-              this.brief,
+        this.brief,
         this.company,
         this.courses,
         this.id,
-        this.isFollow,
         this.jobTitle,
         this.logoUrl,
-        this.students,
         this.teacherName,
-        this.teacherCourse,
 
     });
   final String? brief;
 
   final String? company;
 
-  final int? courses;
+  final List<Course>? courses;
 
   final int? id;
-
-  @JsonKey(name: "is_follow")
-  final int? isFollow;
 
   @JsonKey(name: "job_title")
   final String? jobTitle;
@@ -35,13 +29,8 @@ class Teacher extends Equatable {
   @JsonKey(name: "logo_url")
   final String? logoUrl;
 
-  final int? students;
-
   @JsonKey(name: "teacher_name")
   final String? teacherName;
-
-  @JsonKey(name: "teacher_course")
-  final List<TeacherCourse>? teacherCourse;
 
   
   factory Teacher.fromJson(Map<String,dynamic> json) => _$TeacherFromJson(json);
@@ -56,26 +45,20 @@ class Teacher extends Equatable {
         company ?? "",
         courses ?? "",
         id ?? "",
-        isFollow ?? "",
         jobTitle ?? "",
         logoUrl ?? "",
-        students ?? "",
         teacherName ?? "",
-        teacherCourse ?? "",
 
     ];
 
   Teacher copyWith({
               String? brief,
         String? company,
-        int? courses,
+        List<Course>? courses,
         int? id,
-        int? isFollow,
         String? jobTitle,
         String? logoUrl,
-        int? students,
         String? teacherName,
-        List<TeacherCourse>? teacherCourse,
 
     }){
 
@@ -84,12 +67,9 @@ class Teacher extends Equatable {
         company: company ?? this.company,
         courses: courses ?? this.courses,
         id: id ?? this.id,
-        isFollow: isFollow ?? this.isFollow,
         jobTitle: jobTitle ?? this.jobTitle,
         logoUrl: logoUrl ?? this.logoUrl,
-        students: students ?? this.students,
         teacherName: teacherName ?? this.teacherName,
-        teacherCourse: teacherCourse ?? this.teacherCourse,
 
      );
   }

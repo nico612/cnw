@@ -1,5 +1,6 @@
 
 
+import 'package:cniao/pages/login/view/index.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,7 @@ Handler homeHandler = Handler(handlerFunc: (BuildContext? context, Map<String, L
 
 Handler loginHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> parameters) {
-  return Container();
+  return const LoginPage();
 });
 
 Handler courseDetailHandler = Handler(

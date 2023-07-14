@@ -1,9 +1,9 @@
 
 
-import 'package:cniao/router/router_handles.dart';
+import 'package:cniao/route/route_handles.dart';
 import 'package:fluro/fluro.dart';
 
-class Routers {
+class Routes {
   
   static String home = "/";
   static String login = "/login";

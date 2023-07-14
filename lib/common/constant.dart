@@ -1,3 +1,5 @@
+const defualtHeadImg =
+    "https://img.cniao5.com/o_1doe052i9e1qu41n8t1fu96lf7.png";
 
 /// 登录用户信息
 const String STORAGE_LOGIN_USER_KEY = "login_user";
