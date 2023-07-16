@@ -60,6 +60,9 @@ dependencies:
   native_device_orientation: ^1.1.4
   card_swiper: ^2.0.4
   json_annotation: ^4.8.1
+  flutter_keyboard_visibility: ^5.4.1
+  carousel_slider: ^4.2.1
+  pull_to_refresh: ^2.0.0
  
 dev_dependencies:
   flutter_test:

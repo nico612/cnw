@@ -6,7 +6,7 @@ part 'teacher.g.dart';
 @JsonSerializable()
 class Teacher extends Equatable {
     const Teacher({
-        this.brief,
+              this.brief,
         this.company,
         this.courses,
         this.id,

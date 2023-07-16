@@ -1,5 +1,8 @@
 
 
+import 'package:cniao/common/values/colors.dart';
+import 'package:cniao/common/values/font_size.dart';
+import 'package:cniao/pages/course/models/course_request_model.dart';
 import 'package:cniao/pages/index/bloc/index_bloc.dart';
 import 'package:cniao/pages/index/course/view/index.dart';
 import 'package:cniao/pages/index/grade/view/index.dart';
@@ -19,10 +22,10 @@ class IndexPage extends StatefulWidget {
   final IndexBloc indexBloc = IndexBloc();
 
   final tabViews = <Widget>[
-    RecommendPage(),
-    CoursePage(),
-    CoursePage(),
-    GradePage()
+    const RecommendPage(),
+    CoursePage(requestModel: const CourseRequestModel(isFree: true)),
+    CoursePage(requestModel: const CourseRequestModel(courseType: 3, isFree: false),),
+    const GradePage()
     
   ];
 
@@ -55,7 +58,7 @@ class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixi
                   backgroundColor: Colors.white,
                   // 去掉导航条下面的阴影
                   elevation: 0,
-                  title: const Text("search bar", style: TextStyle(color: Colors.redAccent),),
+                  title: const SerachBar(),
                   bottom: PreferredSize( //指定一个部件的首选大小，可以用于自定义AppBar的大小，或者其他需要指定大小的部件
                     preferredSize: const Size.fromHeight(30),
                     child: Align(
@@ -68,11 +71,14 @@ class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixi
                         labelColor: const Color(0xFFFC9900),
                         labelStyle: TextStyle(fontSize: 45.sp, fontWeight: FontWeight.w500),
                         unselectedLabelColor: const Color(0xFF303132),
-                        indicator: TabSizeIndicator(
-                          wantWidth: 50.w,
-                          borderSide: const BorderSide(width: 3.0, color: Color(0xFFFC9900))
+                        // indicator: const TabSizeIndicator(
+                          indicator: const UnderlineTabIndicator(
+                          insets: EdgeInsets.symmetric(horizontal: 20),
+                          borderSide: BorderSide(width: 3.0, color: Color(0xFFFC9900))
                         ),
-                        tabs: state.tabs.map((value) => Text(value)).toList(),
+                        tabs: state.tabs.map((value) => 
+                            Text(value)
+                         ).toList(),
                       ),
                     ),
                   ),
@@ -93,4 +99,39 @@ class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixi
 
   @override
   bool get wantKeepAlive => true;
+}
+
+
+class SerachBar extends StatelessWidget {
+  const SerachBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      height: 100.h,
+      //圆角部分实现
+      decoration: BoxDecoration(
+        color: const Color(0xFFF2F2F2),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(children: [
+        SizedBox(child: Icon(Icons.search, size: 50.sp, color: AppColors.gray,),),
+        Expanded(child: TextField(
+          focusNode: FocusNode(),
+          controller: TextEditingController(),
+          decoration: InputDecoration(
+            isDense: true,
+            border: InputBorder.none,
+            hintText: '搜索课程',
+            hintStyle: TextStyle(fontSize: AppFontSize.normalSp, color: AppColors.primaryTextColor),
+          ),
+          textInputAction: TextInputAction.search,
+          onTap: null,
+          onSubmitted: null,
+        ))
+      ]),
+    );
+  }
 }

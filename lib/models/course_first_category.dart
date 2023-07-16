@@ -6,7 +6,7 @@ part 'course_first_category.g.dart';
 @JsonSerializable()
 class CourseFirstCategory extends Equatable {
     const CourseFirstCategory({
-              this.code,
+        this.code,
         this.id,
         this.title,
 
@@ -19,6 +19,7 @@ class CourseFirstCategory extends Equatable {
 
   
   factory CourseFirstCategory.fromJson(Map<String,dynamic> json) => _$CourseFirstCategoryFromJson(json);
+  
   Map<String, dynamic> toJson() => _$CourseFirstCategoryToJson(this);
 
   @override

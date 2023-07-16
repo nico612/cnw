@@ -38,7 +38,7 @@ final List<BottomNavigationBarItem> bottomNavItems = [
 
 final pages = [
   IndexPage(),
-  const CourseListPage(),
+  CourseListPage(),
   const StudyCenterPage(),
   const ProfilePage()
 ];

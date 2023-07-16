@@ -1,0 +1,46 @@
+{
+    "code": 1,
+    "data": [
+        {
+            "code": "front",
+            "id": 29,
+            "title": "前端"
+        },
+        {
+            "code": "da",
+            "id": 33,
+            "title": "数据分析"
+        },
+        {
+            "code": "python",
+            "id": 19,
+            "title": "Python"
+        },
+        {
+            "code": "ai",
+            "id": 7,
+            "title": "人工智能"
+        },
+        {
+            "code": "bd",
+            "id": 15,
+            "title": "大数据"
+        },
+        {
+            "code": "java",
+            "id": 8,
+            "title": "Java"
+        },
+        {
+            "code": "fultter",
+            "id": 34,
+            "title": "Flutter"
+        },
+        {
+            "code": "android",
+            "id": 1,
+            "title": "Android"
+        }
+    ],
+    "message": "成功"
+}
