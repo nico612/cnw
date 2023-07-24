@@ -8,6 +8,7 @@ main()  {
   runZonedGuarded<Future<void>>(() async {
     Gloabl.init().then((value) => {
       runApp(
+        
         App(authenticationRepository: Gloabl.authenticationRepository)
         // const HomeTest()
         )

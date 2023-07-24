@@ -14,21 +14,24 @@ abstract class CourseListEvent extends Equatable {
 class GetCategoriesEvent extends CourseListEvent {
 
   const GetCategoriesEvent();
-  
 }
 
 // 分类栏点击事件
 class SelectedTabIndexChangedEvent extends CourseListEvent {
   const SelectedTabIndexChangedEvent(this.selectedTabIndex);
-
   final int selectedTabIndex;
 }
 
+// fliter button 点击事件
+class FilterItemSelectedEvent extends CourseListEvent {
+  const FilterItemSelectedEvent(this.index);
+  final int index;
+}
 
-// 过滤事件
+
+// 条件list选择事件
 class FilterSelectedIndexChangedEvent extends CourseListEvent {
   const FilterSelectedIndexChangedEvent(this.index, this.value);
-
   final int index;  // 过滤按钮选择index
   final int value;  // 过滤条件选择index
 }

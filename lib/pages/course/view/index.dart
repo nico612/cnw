@@ -3,9 +3,13 @@ import 'package:cniao/common/icons.dart';
 import 'package:cniao/common/values/colors.dart';
 import 'package:cniao/common/values/font_size.dart';
 import 'package:cniao/pages/course/bloc/courselist_bloc.dart';
+import 'package:cniao/pages/course/models/course_request_model.dart';
+import 'package:cniao/pages/course/view/course_tabbar.dart';
 import 'package:cniao/pages/course/view/courselist_const.dart';
 import 'package:cniao/pages/course/view/dropdownlist.dart';
+import 'package:cniao/pages/course/view/filter_page/filter_page.dart';
 import 'package:cniao/pages/index/course/bloc/course_bloc.dart';
+import 'package:cniao/pages/index/course/view/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,248 +46,150 @@ class _CourseListPageState extends State<CourseListPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     return SafeArea(
       bottom: false,
       child: BlocProvider(
           create: (context) => widget.courseListBloc,
-          child: BlocBuilder<CourseListBloc, CourseListState>(
+          child:  BlocBuilder<CourseListBloc, CourseListState>(
             buildWhen: (previous, current) => previous.tabs != current.tabs,
             builder: (context, state) {
               if (state.tabs == null) return Container();
-              _tabController =
-                  TabController(length: state.tabs?.length ?? 0, vsync: this);
-
+              _tabController = TabController(initialIndex: 0, length: state.tabs?.length ?? 1, vsync: this);
               return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BlocBuilder<CourseListBloc, CourseListState>(
-                    builder: (context, state) {
-                      return TabBarWidget( // 课程分类列表
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CourseTabBarWidget(tabController: _tabController,),
+                      //这里加入key，方便弹窗时找到该widge的位置
+                      const CourseFilter(),
+                      CourseTabPages(
                         tabController: _tabController,
-                        tabs:
-                            state.tabs?.map((e) => Text(e.title ?? "")).toList() ??
-                                [],
-                        selectChanged: (index) {
+                      )
+                    ],
+                  );
+            }
+          )        
+        )
+    );
+  }
+}
 
-                          context
-                              .read<CourseListBloc>()
-                              .add(SelectedTabIndexChangedEvent(index));
-                        },
-                      );
-                    }
-                  ),
-                  //这里加入key，方便弹窗时找到该widge的位置
-                  CourseFilter( // 过滤条件
-                    filterItemSelect: (itemIdex) => filterItemSelect( //按钮选择回调
-                        itemIdex,
-                        CourseListFilters[itemIdex],
-                        state.filterSelectedIndexs[itemIdex]),
+// 顶部TabBar
+class CourseTabBarWidget extends StatelessWidget {
 
-                    titles: state.filterSelectedIndexs //过滤条件显示列表
-                        .asMap()
-                        .map((itemIndex, menuSelectedIndex) {
-                          List<Map<String, dynamic>> cTabList =
-                              CourseListFilters[itemIndex];
-                          Map<String, dynamic> cSelectedItem =
-                              cTabList[menuSelectedIndex];
-                          return MapEntry(
-                              itemIndex, cSelectedItem['title'] as String);
-                        })
-                        .values
-                        .toList(),
-                  ),
-                  BlocBuilder<CourseListBloc, CourseListState>(
-                    builder: (context, state) {
-                      return CourseTabPages(
-                        tabController: _tabController,
-                      );
-                    }
-                  )
-                ],
-              );
-            },
-          )),
+  const CourseTabBarWidget({super.key, required this.tabController});
+  final TabController tabController;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CourseListBloc, CourseListState>(
+        builder: (context, state) {
+          return TabBarWidget( // 课程分类列表
+            tabController: tabController,
+            tabs:state.tabs?.map((e) => Text(e.title ?? "")).toList() ?? [],
+            selectChanged: (index) {
+              // 发送tabBar改变事件
+              context
+                  .read<CourseListBloc>()
+                  .add(SelectedTabIndexChangedEvent(index));
+                  CourseOverlayEntryPage.dismiss();
+
+              },
+
+
+          );
+        }
+    );
+  }
+}
+
+// 条件限制栏
+class CourseFilter extends StatelessWidget {
+
+  const CourseFilter({super.key});
+  @override
+  Widget build(BuildContext context) {
+
+    return BlocBuilder<CourseListBloc, CourseListState>(
+
+      builder: (context, state) {
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: filterTabs(state, context),
+            )
+        );
+      },
     );
   }
 
-  //过滤按钮点击
-  // itemIndex: 过滤按钮index
-  // menus 某个限制条件下的条件列表
-  // selectedMenusIndex: 某个限制条件下已选择的index
-  void filterItemSelect(
-      int itemIndex, List<Map<String, dynamic>> menus, int selectedMenusIndex) {
+  List<Widget> filterTabs(CourseListState state, BuildContext context) {
 
 
+        return state.filterSelectedIndexs //选中状态的titles
+                  .asMap()
+                  .map((itemIndex, filterItem) {
+                List<Map<String, dynamic>> cTabList =
+                CourseListFilters[itemIndex];
 
-    BuildContext? context = filterTabKey.currentContext;
-    if (context == null) return;
+                Map<String, dynamic> cSelectedItem =
+                cTabList[filterItem.selectedIndex]; //选中的title
+
+                return MapEntry(
+                    itemIndex, FilterTab(title: cSelectedItem['title'] as String, isSelected: filterItem.isSelected, onTap: () {
+                        context.read<CourseListBloc>().add(FilterItemSelectedEvent(itemIndex));
+                          List<String> menus = cTabList.map((e) => e['title'] as String).toList();
+                        _showDropDownList(context, menus, filterItem, itemIndex);
+                    },));
+              }).values.toList();
+    }
+
+  void _dismissDropDownList() {
+      CourseOverlayEntryPage.dismiss();
+  } 
+
+  /// menus: 展示菜单列表
+  /// itemIndex： 限制按钮index
+  /// 菜单列表选择 index
+  void _showDropDownList(BuildContext context, List<String> menus, FliterItemState filterItem, int itemIndex) {
+      _dismissDropDownList();
+
+      if (filterItem.isSelected) return ;
+        //1. 如果点击的同一个index，直接show或者dimiss
+
+        // 1. 如果已有打开的先dismiss，然后再打开新的
 
     final box = context.findRenderObject() as RenderBox;
-
     final dy = box.localToGlobal(Offset(0, box.size.height)).dy;
 
-    // 获取限制条件list
-    // List<Map<String, dynamic>> menusForItem = CourseListFilters[itemIndex];
-    // List<String> menus = menusForItem.map((e) => e['title'] as String).toList();
-
-    //显示弹窗
     CourseOverlayEntryPage.showPages(
-        context: context,
-        rect: Rect.fromLTRB(0, dy, 0, 0),
-        container: CourseOverlayContainerPage(
-            menus: menus.map((e) => e['title'] as String).toList(),
-            selectedIndex: selectedMenusIndex,
-            selectCallback: ((selectMenuIndex) {
-              print(
-                  "selected filterItem index = $itemIndex, bloc = ${context.read<CourseListBloc>()}");
-              CourseOverlayEntryPage.dismiss();
-              context.read<CourseListBloc>().add(
-                  FilterSelectedIndexChangedEvent(selectMenuIndex, itemIndex));
-            })));
-  }
-}
-
-class TabBarWidget extends StatelessWidget {
-  const TabBarWidget(
-      {required this.tabController,
-      required this.tabs,
-      super.key,
-      this.selectChanged});
-
-  final TabController tabController;
-  final ValueChanged? selectChanged;
-  final List<Widget> tabs;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(5, 15, 5, 0),
-      height: 60.h,
-      child: TabBar(
-        controller: tabController,
-        onTap: selectChanged,
-        tabs: tabs,
-        isScrollable: true,
-        labelColor: AppColors.primaryColor,
-        labelStyle: TextStyle(fontSize: 45.sp, fontWeight: FontWeight.w500),
-        unselectedLabelColor: Colors.black,
-        indicator: const UnderlineTabIndicator(
-            insets: EdgeInsets.symmetric(horizontal: 10),
-            borderSide: BorderSide(color: AppColors.primaryColor, width: 3.0)
-            // borderRadius: BorderRadius.zero
-            ),
-      ),
-    );
-  }
-}
-
-typedef CourseFilterItemSelect = void Function(int index);
-
-class CourseFilter extends StatelessWidget {
-  const CourseFilter({super.key, this.filterItemSelect, required this.titles});
-
-  final CourseFilterItemSelect? filterItemSelect;
-
-  final List<String> titles;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 80.h,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: titles
-            .asMap()
-            .map((index, title) {
-              // List<Map<String, dynamic>> cTabList = CourseListFilters[index];
-              // Map<String, dynamic> cSelectedItem = cTabList[selectedIndex];
-              // List<String> menus =
-              // cTabList.map((e) => e['title'] as String).toList();
-              return MapEntry(
-                  index,
-                  FilterTab(
-                    title: title,
-                    onTap: () => filterItemSelect?.call(index),
-                  ));
-            })
-            .values
-            .toList(),
-      ),
-    );
-  }
-
-  void _showDropDownList(List<String> menus, int selectedIndex,
-      BuildContext context, int filterMenuIndex) {
-    CourseOverlayEntryPage.showPages(
+        top: dy,
         context: context,
         container: CourseOverlayContainerPage(
             menus: menus,
-            selectedIndex: selectedIndex,
+            selectedIndex: filterItem.selectedIndex,
             selectCallback: ((index) {
-              print(
-                  "selected index = $index, bloc = ${context.read<CourseListBloc>()}");
+                CourseOverlayEntryPage.dismiss();
+              // if (index == filterItem.selectedIndex) return ;
+              // 触发事件值改变事件
               context
                   .read<CourseListBloc>()
-                  .add(FilterSelectedIndexChangedEvent(filterMenuIndex, index));
-            })));
+                  .add(FilterSelectedIndexChangedEvent(itemIndex, index));
+            })),
 
-    //   if (isShowDrop) {
-    //     isShowDrop = false;
-    //     _overlayEntry.remove();
-    //     // return;
-    //   }
+    );
 
-    //   final box = blocContext.findRenderObject() as RenderBox;
-    //   final dy = box.localToGlobal(Offset(0, box.size.height)).dy;
-
-    //   isShowDrop = true;
-    //   _overlayEntry = OverlayEntry(
-    //       builder: (context) => Positioned.fill(
-    //           top: dy,
-    //           child: Material(
-    //             color: const Color(0x55000000),
-    //             child: Column(
-    //               children: [
-    //                 Container(
-    //                   color: Colors.white,
-    //                   constraints:
-    //                       BoxConstraints.expand(height: 51.0 * menus.length),
-    //                   child: DropDownList(
-    //                       menus: menus,
-    //                       selectedIndex: selectedIndex,
-    //                       onTap: (index) {
-    //                         print(
-    //                             "selected index = $index, bloc = ${blocContext.read<CourseListBloc>()}");
-    //                         blocContext.read<CourseListBloc>().add(
-    //                             FilterSelectedIndexChangedEvent(
-    //                                 filterMenuIndex, index));
-
-    //                         _overlayEntry.remove();
-    //                         isShowDrop = false;
-    //                       }),
-    //                 ),
-    //                 Expanded(child: GestureDetector(
-    //                   onTap: () {
-    //                     _overlayEntry.remove();
-    //                     isShowDrop = false;
-    //                   },
-    //                 ))
-    //               ],
-    //             ),
-    //           )));
-
-    //   Overlay.maybeOf(context)?.insert(_overlayEntry);
   }
 }
 
+// 遮
 class CourseOverlayContainerPage extends StatelessWidget {
-  const CourseOverlayContainerPage(
-      {super.key,
-      required this.menus,
-      required this.selectedIndex,
-      this.selectCallback});
+  const CourseOverlayContainerPage({super.key,
+    required this.menus,
+    required this.selectedIndex,
+    this.selectCallback});
 
   final List<String> menus;
   final int selectedIndex;
@@ -310,24 +216,30 @@ class CourseOverlayEntryPage extends OverlayEntry {
 
   CourseOverlayEntryPage({required super.builder});
 
-  factory CourseOverlayEntryPage.fromPosition(
-      {Rect rect = const Rect.fromLTRB(0, 0, 0, 0),
-      Color? color = const Color(0x55000000),
-      Widget? container,
-      OnTapEntryBackground? tapEntryBackground}) {
-
+  factory CourseOverlayEntryPage.fromPosition({
+        double? left = 0,
+        double? top = 0,
+        double? right = 0,
+        double? bottom = 0,
+        Color? color = const Color(0x55000000),
+        Widget? container,
+        OnTapEntryBackground? tapEntryBackground}) {
     return CourseOverlayEntryPage(
-        builder: (context) => Positioned.fill(
-              top: rect.top,
+        builder: (context) =>
+            Positioned.fill(
+              left: left,
+              top: top,
+              right: right,
+              bottom: bottom,
               child: GestureDetector(
                 onTap: tapEntryBackground,
                 child: Material(
                   color: color,
                   child: Stack(
                     children: [
-                      Container(
-                        color: Colors.redAccent,
-                      ),
+                      // Container(
+                      //   color: Colors.redAccent,
+                      // ),
                       container ?? Container()
                     ],
                   ),
@@ -339,28 +251,24 @@ class CourseOverlayEntryPage extends OverlayEntry {
 
   static CourseOverlayEntryPage? _overlayEntryPage;
 
-  static showPages(
-      {bool show = true,
-      required BuildContext context,
-      Widget? container,
-      Rect? rect}) {
 
-    if (!show) {
-      dismiss();
-      return;
-    }
-    // 如果正在显示则先移除
-    dismiss();
-
-
-    print("state = ");
+  static showPages({
+    // bool show = true,
+    required BuildContext context,
+    Widget? container,
+    double? left = 0,
+    double? top = 0,
+    double? right = 0,
+    double? bottom = 0,
+    }) {
 
     _overlayEntryPage = CourseOverlayEntryPage.fromPosition(
-        rect: rect ?? Rect.zero,
+        left: left,
+        top: top,
+        right: right,
+        bottom: bottom,
         container: container,
         tapEntryBackground: () => dismiss());
-
-
 
     OverlayState? state = Overlay.maybeOf(context);
     print("state = $state");
@@ -369,38 +277,13 @@ class CourseOverlayEntryPage extends OverlayEntry {
   }
 
   static void dismiss() {
-    _overlayEntryPage?.remove();
+    if(_overlayEntryPage?.mounted ?? false) {
+      _overlayEntryPage?.remove();
+    }
   }
 }
 
-class FilterTab extends StatelessWidget {
-  const FilterTab({super.key, required this.title, this.onTap});
 
-  final String title;
-  final GestureTapCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: onTap,
-        child: Row(
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                  fontSize: AppFontSize.normalSp, color: AppColors.black),
-            ),
-            Padding(
-                padding: const EdgeInsets.only(left: 1),
-                child: Icon(
-                  CNWFonts.down,
-                  size: 32.sp,
-                  color: Colors.black,
-                ))
-          ],
-        ));
-  }
-}
 
 class CourseTabPages extends StatelessWidget {
   const CourseTabPages({super.key, required this.tabController});
@@ -411,16 +294,42 @@ class CourseTabPages extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CourseListBloc, CourseListState>(
         builder: ((context, state) {
-      return Expanded(
-          child: TabBarView(
-        controller: tabController,
-        children: state.tabs
-                ?.map((e) => Container(
-                      color: Colors.amberAccent,
-                    ))
-                .toList() ??
-            [],
-      ));
-    }));
+
+            final courseType = CourseListFilters[0][state.filterSelectedIndexs[0].selectedIndex]['value'] as int;
+            final diff = CourseListFilters[1][state.filterSelectedIndexs[1].selectedIndex]['value'] as int;
+            final free = CourseListFilters[2][state.filterSelectedIndexs[2].selectedIndex]['value'] as int;
+            final sortField = CourseListFilters[3][state.filterSelectedIndexs[3].selectedIndex]['value'] as int;
+            String sortStr;
+
+            switch (sortField) {
+              case 1:
+              sortStr = "comment";
+              break;
+              case 2:
+              sortStr = "study";
+              default:
+              sortStr = "timne";
+              break;
+            }
+
+          return Expanded(
+              child: TabBarView(
+                controller: tabController,
+                children: state.tabs?.asMap().map((index, tab) {
+                      
+                      return MapEntry(index, CoursePage(courseBloc: CourseBloc(),requestModel: CourseRequestModel(
+                          courseType: courseType,
+                          difficulty: diff,
+                          free: free,
+                          sortField: sortStr
+                        )
+                      )
+                    );
+                    
+                    }).values
+                    .toList() ??
+                    [],
+              ));
+        }));
   }
 }

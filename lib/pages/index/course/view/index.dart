@@ -12,10 +12,10 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 class CoursePage extends StatefulWidget {
 
-  CoursePage({super.key, required this.requestModel});
+  const CoursePage({super.key, required this.requestModel, required this.courseBloc});
 
   final CourseRequestModel requestModel;
-  final CourseBloc courseBloc = CourseBloc();
+  final CourseBloc courseBloc;
 
   @override
   State<CoursePage> createState() => _CoursePageState();
@@ -26,8 +26,8 @@ class _CoursePageState extends State<CoursePage> with AutomaticKeepAliveClientMi
 
   @override
   void initState() {
-
     _loadData(widget.requestModel);
+    print("init state");
     super.initState();
   }
 
@@ -74,6 +74,6 @@ class _CoursePageState extends State<CoursePage> with AutomaticKeepAliveClientMi
   }
   
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
   
 }

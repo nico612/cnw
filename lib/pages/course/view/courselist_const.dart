@@ -4,6 +4,8 @@ const List<String> CourseListFilterKeys = [
   'isFree',
   'q'
 ];
+
+
 const List<List<Map<String, dynamic>>> CourseListFilters = [
   [
     {
@@ -12,11 +14,11 @@ const List<List<Map<String, dynamic>>> CourseListFilters = [
     },
     {
       'title': '商业实战',
-      'value': 1,
+      'value': 3,
     },
     {
       'title': '专项好课',
-      'value': 2,
+      'value': 1,
     },
   ],
   [

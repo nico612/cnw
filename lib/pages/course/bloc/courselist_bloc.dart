@@ -17,15 +17,41 @@ class CourseListBloc extends Bloc<CourseListEvent, CourseListState> {
     on<GetCategoriesEvent>(_getCategories);
 
     // tab select
-    on<SelectedTabIndexChangedEvent>((event, emit) =>
-        emit(state.copyWith(selectedTabIndex: (event).selectedTabIndex)));
+    on<SelectedTabIndexChangedEvent>((event, emit) {
+
+        //去除filter选择状态
+        List<FliterItemState> filterSelectedIndexs = state.filterSelectedIndexs.map((item) => item.copyWith(isSelected: false)).toList();
+
+        emit(state.copyWith(selectedTabIndex: (event).selectedTabIndex, filterSelectedIndexs: filterSelectedIndexs));
+    });
+    
+
+    //filter按钮点击事件
+    on<FilterItemSelectedEvent>((event, emit) => emit(state.copyWith(
+      filterSelectedIndexs: state.filterSelectedIndexs
+      .asMap()
+      .map((index, item) => event.index == index ? MapEntry(index, item.copyWith(isSelected: !item.isSelected) ) : MapEntry(index, item.copyWith(isSelected: false)))
+      .values.
+      toList())
+    ));
+    
 
     //filter select
     on<FilterSelectedIndexChangedEvent>((event, emit) {
-      List<int> indexs = List.from(state.filterSelectedIndexs);
-      indexs[event.index] = event.value;
+
+      List<FliterItemState> indexs = List.from(state.filterSelectedIndexs);
+      FliterItemState itemState = indexs[event.index];
+      
+      itemState = itemState.copyWith(selectedIndex: event.value, isSelected: false);
+      indexs[event.index] = itemState;
+
+      // TODU: 条件筛选后没有按钮没有更新
+      for (var item in indexs) {
+        print("item = ${item.toString()}");
+      }
       emit(state.copyWith(filterSelectedIndexs: indexs));
     });
+
   }
 
 

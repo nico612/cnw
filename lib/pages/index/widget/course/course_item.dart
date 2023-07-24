@@ -15,67 +15,65 @@ class CourseItem extends StatelessWidget {
   final Course course;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: InkWell(
-        onTap: () {
-          if (onTap != null) onTap?.call(course);
-        },
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.h),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 300.w,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    imageUrl: UtilsString.fixedHttpStart(course.imgUrl ?? ""),
-                    fit: BoxFit.cover,
-                  ),
+    return InkWell(
+      onTap: () {
+        if (onTap != null) onTap?.call(course);
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 10.h),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 300.w,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: UtilsString.fixedHttpStart(course.imgUrl ?? ""),
+                  fit: BoxFit.cover,
                 ),
               ),
-              Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 60.h,
-                          child: Text(course.name ?? "",
-                            style: TextStyle(
-                              fontSize: 30.sp,
-                              color: Colors.black
+            ),
+            Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 60.h,
+                        child: Text(course.name ?? "",
+                          style: TextStyle(
+                            fontSize: 30.sp,
+                            color: Colors.black
+                          ),
+                          maxLines: 2,
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(course.firstCategory?.title ?? "", style: TextStyle(fontSize: 25.sp),),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Icon(Icons.circle, color: Colors.grey, size: 5,),
                             ),
-                            maxLines: 2,
-                          ),
+                            Text("${course.lessonsPlayedTime}", style: TextStyle(fontSize: 25.sp),),
+                          ],
                         ),
-                        Padding(
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text("${course.firstCategory?.title ?? ""}", style: TextStyle(fontSize: 25.sp),),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5),
-                                child: Icon(Icons.circle, color: Colors.grey, size: 5,),
-                              ),
-                              Text("${course.lessonsPlayedTime}", style: TextStyle(fontSize: 25.sp),),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: _coursePircesWidgets(course),
-                        )
-                      ],
-              ),
-                  ))
-            ],
-          ),
+                      ),
+                      Container(
+                        child: _coursePircesWidgets(course),
+                      )
+                    ],
+            ),
+                ))
+          ],
         ),
-
       ),
+
     );
   }
 

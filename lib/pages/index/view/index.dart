@@ -4,6 +4,7 @@ import 'package:cniao/common/values/colors.dart';
 import 'package:cniao/common/values/font_size.dart';
 import 'package:cniao/pages/course/models/course_request_model.dart';
 import 'package:cniao/pages/index/bloc/index_bloc.dart';
+import 'package:cniao/pages/index/course/bloc/course_bloc.dart';
 import 'package:cniao/pages/index/course/view/index.dart';
 import 'package:cniao/pages/index/grade/view/index.dart';
 import 'package:cniao/pages/index/recommend/view/index.dart';
@@ -23,8 +24,8 @@ class IndexPage extends StatefulWidget {
 
   final tabViews = <Widget>[
     const RecommendPage(),
-    CoursePage(requestModel: const CourseRequestModel(isFree: true)),
-    CoursePage(requestModel: const CourseRequestModel(courseType: 3, isFree: false),),
+    CoursePage(requestModel: const CourseRequestModel(free: -1), courseBloc: CourseBloc()),
+    CoursePage(requestModel: const CourseRequestModel(courseType: 3, free: -1), courseBloc: CourseBloc(),),
     const GradePage()
     
   ];
